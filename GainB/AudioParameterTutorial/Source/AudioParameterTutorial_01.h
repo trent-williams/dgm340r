@@ -65,13 +65,16 @@ public:
     //==============================================================================
     void prepareToPlay (double, int) override 
     {
-        previousGain = *gain;
+        auto phase = *invertPhase ? -1.0f : 1.0f;
+        previousGain = *gain * phase;
     }
     void releaseResources() override {}
 
     void processBlock (juce::AudioSampleBuffer& buffer, juce::MidiBuffer&) override
     {
-        auto currentGain = gain->get();
+        auto phase = *invertPhase ? -1.0f : 1.0f;
+        //auto currentGain = gain->get();
+        auto currentGain = *gain * phase;
 
         if (juce::approximatelyEqual(currentGain, previousGain))
         {
