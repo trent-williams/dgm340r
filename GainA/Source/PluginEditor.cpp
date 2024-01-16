@@ -27,6 +27,9 @@ GainAAudioProcessorEditor::GainAAudioProcessorEditor (GainAAudioProcessor& p)
 
     // this function add the slider to the GUI
     addAndMakeVisible(&midiVolume);
+
+    // add listener to constructor
+    midiVolume.addListener(this);
 }
 
 GainAAudioProcessorEditor::~GainAAudioProcessorEditor()
@@ -53,4 +56,10 @@ void GainAAudioProcessorEditor::resized()
 
     // sets the position and size of th slider with arguments (x, y, width, and height)
     midiVolume.setBounds(40, 30, 20, getHeight() - 60);
+}
+
+// listener function
+void GainAAudioProcessorEditor::sliderValueChanged(juce::Slider* slider)
+{
+    audioProcessor.noteOnVel = midiVolume.getValue();
 }

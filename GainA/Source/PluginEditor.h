@@ -14,7 +14,7 @@
 //==============================================================================
 /**
 */
-class GainAAudioProcessorEditor  : public juce::AudioProcessorEditor
+class GainAAudioProcessorEditor : public juce::AudioProcessorEditor, private juce::Slider::Listener
 {
 public:
     GainAAudioProcessorEditor (GainAAudioProcessor&);
@@ -25,6 +25,9 @@ public:
     void resized() override;
 
 private:
+    // Create variable and method for slider feedback
+    void sliderValueChanged(juce::Slider* slider) override;
+
     // This reference is provided as a quick way for your editor to
     // access the processor object that created it.
     GainAAudioProcessor& audioProcessor;

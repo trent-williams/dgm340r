@@ -50,7 +50,8 @@
     </XCODE_MAC>
     <VS2019 targetFolder="Builds/VisualStudio2019">
       <CONFIGURATIONS>
-        <CONFIGURATION name="Debug" isDebug="1" optimisation="1" targetName="AudioParameterTutorial"/>
+        <CONFIGURATION name="Debug" isDebug="1" optimisation="1" targetName="AudioParameterTutorial"
+                       enablePluginBinaryCopyStep="1"/>
         <CONFIGURATION name="Release" isDebug="0" optimisation="3" targetName="AudioParameterTutorial"/>
       </CONFIGURATIONS>
       <MODULEPATHS>

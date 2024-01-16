@@ -131,6 +131,7 @@ bool GainAAudioProcessor::isBusesLayoutSupported (const BusesLayout& layouts) co
 
 void GainAAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce::MidiBuffer& midiMessages)
 {
+    /*
     juce::ScopedNoDenormals noDenormals;
     auto totalNumInputChannels  = getTotalNumInputChannels();
     auto totalNumOutputChannels = getTotalNumOutputChannels();
@@ -156,6 +157,24 @@ void GainAAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce::
 
         // ..do something to the data...
     }
+    */
+    // midi process block
+    buffer.clear();
+
+    juce::MidiBuffer processedMidi;
+
+    for (const auto metadata : midiMessages)
+    {
+        auto message = metadata.getMessage();
+        const auto time = metadata.samplePosition;
+
+        if (message.isNoteOn())
+        {
+            message = juce::MidiMessage::noteOn(message.getChannel(), message.getNoteNumber(), (juce::uint8)noteOnVel);
+        }
+        processedMidi.addEvent(message, time);
+    }
+    midiMessages.swapWith(processedMidi);
 }
 
 //==============================================================================
