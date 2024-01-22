@@ -57,6 +57,7 @@ public:
         frequencySlider.setRange (50, 5000.0);          // [1]
         frequencySlider.setTextValueSuffix (" Hz");     // [2]
         frequencySlider.addListener (this);             // [3]
+        frequencySlider.setSkewFactor(0.35);            // Skew slider towards lower numbers
 
         addAndMakeVisible (frequencyLabel);
         frequencyLabel.setText ("Frequency", juce::dontSendNotification);
@@ -65,11 +66,12 @@ public:
         addAndMakeVisible (durationSlider);
         durationSlider.setRange (1.0 / frequencySlider.getMaximum(),
                                  1.0 / frequencySlider.getMinimum());
-        durationSlider.setTextValueSuffix (" s");
+        durationSlider.setTextValueSuffix (" seconds");
         durationSlider.addListener (this);
+        durationSlider.setSkewFactor(0.35);             // Skew slider to be in line with frequencySlider
 
         addAndMakeVisible (durationLabel);
-        durationLabel.setText ("Duration", juce::dontSendNotification);
+        durationLabel.setText ("Period", juce::dontSendNotification);
         durationLabel.attachToComponent (&durationSlider, true);
 
         frequencySlider.setValue (500.0); // [5]

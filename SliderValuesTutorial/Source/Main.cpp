@@ -8,6 +8,8 @@
 
 #include <JuceHeader.h>
 #include "SliderValuesTutorial_01.h"
+//#include <juce_gui_basics/juce_gui_basics.h>
+
 
 class Application    : public juce::JUCEApplication
 {
