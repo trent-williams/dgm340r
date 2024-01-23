@@ -57,13 +57,18 @@ public:
         setAudioChannels (0, 2); // no inputs, two outputs
 
         //GUI
-        levelSlider.setRange(0, 0.25);
-        levelSlider.setTextBoxStyle(juce::Slider::TextBoxRight, true, 100, 25);
-        levelLabel.setText("Noise Level", juce::dontSendNotification);
+        levelSliderLeft.setRange(0, 0.25);
+        levelSliderLeft.setTextBoxStyle(juce::Slider::TextBoxRight, true, 100, 25);
+        levelSliderRight.setRange(0, 0.25);
+        levelSliderRight.setTextBoxStyle(juce::Slider::TextBoxRight, true, 100, 25);
+        levelLabelLeft.setText("Noise Level Left", juce::dontSendNotification);
+        levelLabelRight.setText("Noise Level Right", juce::dontSendNotification);
 
         // Make things visable
-        addAndMakeVisible(levelSlider);
-        addAndMakeVisible(levelLabel);
+        addAndMakeVisible(levelSliderLeft);
+        addAndMakeVisible(levelSliderRight);
+        addAndMakeVisible(levelLabelLeft);
+        addAndMakeVisible(levelLabelRight);
     }
 
     ~MainContentComponent() override
@@ -87,28 +92,46 @@ public:
 
     void getNextAudioBlock (const juce::AudioSourceChannelInfo& bufferToFill) override
     {
+        auto levelLeft = (float)levelSliderLeft.getValue();
+        auto levelRight = (float)levelSliderRight.getValue();
+        auto levelScaleLeft = levelLeft * 2.0f;
+        auto levelScaleRight = levelRight * 2.0f;
+
         for (auto channel = 0; channel < bufferToFill.buffer->getNumChannels(); ++channel)
         {
             // Get a pointer to the start sample in the buffer for this audio output channel
-            auto* buffer = bufferToFill.buffer->getWritePointer (channel, bufferToFill.startSample);
+            auto* buffer = bufferToFill.buffer->getWritePointer(channel, bufferToFill.startSample);
 
             // Fill the required number of samples with noise between -0.125 and +0.125
-            for (auto sample = 0; sample < bufferToFill.numSamples; ++sample)
-                buffer[sample] = random.nextFloat() * 0.25f - 0.125f;
+            if (channel == 0)
+            {
+                for (auto sample = 0; sample < bufferToFill.numSamples; ++sample)
+                    buffer[sample] = random.nextFloat() * levelScaleLeft - levelLeft;
+            }
+            else
+            {
+                for (auto sample = 0; sample < bufferToFill.numSamples; ++sample)
+                    buffer[sample] = random.nextFloat() * levelScaleRight - levelRight;
+            }
+            
         }
     }
 
     void resized() override
     {
-        levelLabel.setBounds(10, 10, 90, 20);
-        levelSlider.setBounds(100, 10, getWidth() - 110, 20);
+        levelLabelLeft.setBounds(10, 10, 90, 20);
+        levelLabelRight.setBounds(10, 30, 90, 20);
+        levelSliderLeft.setBounds(100, 10, getWidth() - 110, 20);
+        levelSliderRight.setBounds(100, 30, getWidth() -110, 20);
     }
 
 private:
     juce::Random random;
 
-    juce::Slider levelSlider;
-    juce::Label levelLabel;
+    juce::Slider levelSliderLeft;
+    juce::Slider levelSliderRight;
+    juce::Label levelLabelLeft;
+    juce::Label levelLabelRight;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (MainContentComponent)
 };
