@@ -19,10 +19,11 @@ JustAKnobAudioProcessorEditor::JustAKnobAudioProcessorEditor (JustAKnobAudioProc
 
     addAndMakeVisible(knob);
     knob.setSliderStyle(juce::Slider::SliderStyle::RotaryHorizontalDrag);
+    knob.setTextBoxStyle(juce::Slider::NoTextBox, true, 0, 0);
     knob.setRange(-1, 1);
     knob.setValue(0);
 
-    knob.setLookAndFeel(&customLookAndFeel);
+    knob.setLookAndFeel(&knobLookAndFeel);
 }
 
 JustAKnobAudioProcessorEditor::~JustAKnobAudioProcessorEditor()
@@ -33,8 +34,8 @@ JustAKnobAudioProcessorEditor::~JustAKnobAudioProcessorEditor()
 void JustAKnobAudioProcessorEditor::paint (juce::Graphics& g)
 {
     // (Our component is opaque, so we must completely fill the background with a solid colour)
-    g.fillAll (getLookAndFeel().findColour (juce::ResizableWindow::backgroundColourId));
-
+    //g.fillAll (getLookAndFeel().findColour (juce::ResizableWindow::backgroundColourId));
+    g.fillAll(juce::Colours::white);
     g.setColour (juce::Colours::green);
     g.setFont (15.0f);
    // g.drawFittedText ("Hello World!", getLocalBounds(), juce::Justification::centred, 1);
@@ -42,8 +43,5 @@ void JustAKnobAudioProcessorEditor::paint (juce::Graphics& g)
 
 void JustAKnobAudioProcessorEditor::resized()
 {
-    // This is generally where you'll want to lay out the positions of any
-    // subcomponents in your editor..
-
     knob.setBounds(20, 20, 400, 400);
 }
