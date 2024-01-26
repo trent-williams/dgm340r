@@ -58,11 +58,14 @@ public:
         frequencySlider.setRange (50.0, 5000.0);
         frequencySlider.setSkewFactorFromMidPoint (500.0); // [4]
         //frequencySlider.setLookAndFeel(&customLookAndFeel);
-        frequencySlider.onValueChange = [this]
+        frequencySlider.onValueChange = [this] { targetFrequency = frequencySlider.getValue(); };
         {
             if (currentSampleRate > 0.0)
                 updateAngleDelta();
         };
+
+        addAndMakeVisible(levelSlider);
+        levelSlider.setRange(0.0, 0.25);
 
         setSize (600, 100);
         setAudioChannels (0, 2); // no inputs, two outputs
@@ -77,6 +80,7 @@ public:
     {
         //frequencySlider.setBounds (10, 10, getWidth() - 20, 20);
         frequencySlider.setBounds(getWidth() / 2 - 100, getHeight() / 2 - 100, 200, 200);
+        levelSlider.setBounds(10, 10, getWidth() - 20, 20);
     }
 
     void updateAngleDelta()
@@ -95,7 +99,7 @@ public:
 
     void getNextAudioBlock (const juce::AudioSourceChannelInfo& bufferToFill) override
     {
-        auto level = 0.125f;
+        /*auto level = levelSlider.getValue();
         auto* leftBuffer  = bufferToFill.buffer->getWritePointer (0, bufferToFill.startSample);
         auto* rightBuffer = bufferToFill.buffer->getWritePointer (1, bufferToFill.startSample);
 
@@ -105,12 +109,50 @@ public:
             currentAngle += angleDelta;
             leftBuffer[sample]  = currentSample * level;
             rightBuffer[sample] = currentSample * level;
+        }*/
+
+        //Updated Synthesis Code
+        auto level = levelSlider.getValue();
+        auto* leftBuffer = bufferToFill.buffer->getWritePointer(0, bufferToFill.startSample);
+        auto* rightBuffer = bufferToFill.buffer->getWritePointer(1, bufferToFill.startSample);
+
+        auto localTargetFrequency = targetFrequency;
+
+        if (! juce::approximatelyEqual (localTargetFrequency, currentFrequency))
+        {
+            auto frequencyIncrement = (localTargetFrequency - currentFrequency) / bufferToFill.numSamples;
+            
+            for (auto sample = 0; sample < bufferToFill.numSamples; ++sample)
+            {
+                auto currentSample = (float)std::sin(currentAngle);
+                currentFrequency += frequencyIncrement;
+                updateAngleDelta();
+                currentAngle += angleDelta;
+                leftBuffer[sample] = currentSample * level;
+                rightBuffer[sample] = currentSample * level;
+            }
+            
+            currentFrequency = localTargetFrequency;
+        }
+        else
+        {
+            for (auto sample = 0; sample < bufferToFill.numSamples; ++sample)
+            {
+                auto currentSample = (float)std::sin(currentAngle);
+                currentAngle += angleDelta;
+                leftBuffer[sample] = currentSample * level;
+                rightBuffer[sample] = currentSample * level;
+            }
         }
     }
 
 private:
     juce::Slider frequencySlider;
+    juce::Slider levelSlider;
     double currentSampleRate = 0.0, currentAngle = 0.0, angleDelta = 0.0; // [1]
+    float targetFrequency, currentFrequency;
+    //int sample;
+    
 
     //CustomLookAndFeel customLookAndFeel;
 
