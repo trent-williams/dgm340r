@@ -24,6 +24,12 @@ JustAKnobAudioProcessorEditor::JustAKnobAudioProcessorEditor (JustAKnobAudioProc
     knob.setValue(0);
 
     knob.setLookAndFeel(&knobLookAndFeel);
+    /*
+    addAndMakeVisible(secondKnob);
+    secondKnob.setSliderStyle(juce::Slider::SliderStyle::RotaryHorizontalDrag);
+    secondKnob.setTextBoxStyle(juce::Slider::NoTextBox, true, 0, 0);
+    secondKnob.setRange(-1, 1);
+    secondKnob.setValue(0);*/
 }
 
 JustAKnobAudioProcessorEditor::~JustAKnobAudioProcessorEditor()
@@ -44,4 +50,5 @@ void JustAKnobAudioProcessorEditor::paint (juce::Graphics& g)
 void JustAKnobAudioProcessorEditor::resized()
 {
     knob.setBounds(20, 20, 400, 400);
+    secondKnob.setBounds(20, 20, 400, 400);
 }
