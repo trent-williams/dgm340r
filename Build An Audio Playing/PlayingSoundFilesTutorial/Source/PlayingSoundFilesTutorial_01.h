@@ -74,6 +74,7 @@ public:
         setSize (300, 200);
 
         formatManager.registerBasicFormats();       // [1]
+        //formatManager.registerFormat(MP3AudioFormat, false);
         transportSource.addChangeListener (this);   // [2]
 
         setAudioChannels (0, 2);
