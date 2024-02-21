@@ -176,8 +176,6 @@ void AHCompStripAudioProcessor::prepareToPlay (double sampleRate, int samplesPer
     outputModule.setRampDurationSeconds(0.01f);
     compressorModule.prepare(spec);
     pannerModule.prepare(spec);
-    //*Set the Panner Rule
-    //pannerModule.setRule(juce::dsp::PannerRule::squareRoot3dB);
     faderModule.prepare(spec);
     faderModule.setRampDurationSeconds(0.01f);
 

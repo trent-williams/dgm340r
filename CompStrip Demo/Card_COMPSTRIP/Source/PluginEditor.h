@@ -18,7 +18,7 @@
 /**
 */
 class AHCompStripAudioProcessorEditor : public juce::AudioProcessorEditor
-    //,public juce::Slider::Listener
+
 {
 public:
     AHCompStripAudioProcessorEditor(AHCompStripAudioProcessor&);
@@ -27,7 +27,6 @@ public:
     //==============================================================================
     void paint(juce::Graphics&) override;
     void resized() override;
-    //void sliderValueChanged(juce::Slider* slider) override;
 
     typedef juce::AudioProcessorValueTreeState::SliderAttachment SliderAttachment;
 
