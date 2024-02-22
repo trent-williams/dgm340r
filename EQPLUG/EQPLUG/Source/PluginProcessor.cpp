@@ -263,9 +263,17 @@ void EQPLUGAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce:
 
     updatePeakFilter(chainSettings);
 
-    
+    auto cutCoefficients = juce::dsp::FilterDesign<float>::designIIRHighpassHighOrderButterworthMethod(chainSettings.lowCutFreq,
+        getSampleRate(),
+        2 * (chainSettings.lowCutSlope + 1));
 
-    //A lot of pourly written garbage, but hey it works.
+    auto& leftLowCut = leftChain.get<ChainPositions::LowCut>();
+    updateCutFilter(leftLowCut, cutCoefficients, chainSettings.lowCutSlope);
+
+    auto& rightLowCut = rightChain.get<ChainPositions::LowCut>();
+    updateCutFilter(rightLowCut, cutCoefficients, chainSettings.lowCutSlope);
+
+    /*//A lot of pourly written garbage, but hey it works.
     auto cutCoefficients = juce::dsp::FilterDesign<float>::designIIRHighpassHighOrderButterworthMethod(chainSettings.lowCutFreq,
         getSampleRate(),
         2 * (chainSettings.lowCutSlope + 1));
@@ -364,7 +372,7 @@ void EQPLUGAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce:
         rightLowCut.setBypassed<3>(false);
         break;
     }
-    }
+    }*/
     
     //Hardcoded processing for each of the left and right channels
     juce::dsp::AudioBlock<float> block(buffer);
