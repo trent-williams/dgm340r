@@ -93,8 +93,13 @@ void EQPLUGAudioProcessor::changeProgramName (int index, const juce::String& new
 //==============================================================================
 void EQPLUGAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 {
-    // Use this method as the place to do any pre-playback
-    // initialisation that you need..
+    juce::dsp::ProcessSpec spec;
+    spec.maximumBlockSize = samplesPerBlock;
+    spec.numChannels = 1;
+    spec.sampleRate = sampleRate;
+
+    leftChannel.prepare(spec);
+    rightChannel.prepare(spec);
 }
 
 void EQPLUGAudioProcessor::releaseResources()

@@ -53,11 +53,20 @@ public:
     void getStateInformation (juce::MemoryBlock& destData) override;
     void setStateInformation (const void* data, int sizeInBytes) override;
 
+    //NEW STUFF=====================================================================
     static juce::AudioProcessorValueTreeState::ParameterLayout creatParameterLayout();
-
     juce::AudioProcessorValueTreeState treeState{ *this, nullptr, "Parameter", creatParameterLayout() };
 
 private:
+    //Setup EQ Filter Chains and Aliases for easy reference
+    using Filter = juce::dsp::IIR::Filter<float>;
+
+    using CutFilter = juce::dsp::ProcessorChain<Filter, Filter, Filter, Filter>;
+
+    using MonoChain = juce::dsp::ProcessorChain<CutFilter, Filter, CutFilter>;
+
+    MonoChain leftChannel, rightChannel;
+
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (EQPLUGAudioProcessor)
 };
