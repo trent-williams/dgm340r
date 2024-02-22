@@ -98,8 +98,18 @@ void EQPLUGAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock
     spec.numChannels = 1;
     spec.sampleRate = sampleRate;
 
-    leftChannel.prepare(spec);
-    rightChannel.prepare(spec);
+    leftChain.prepare(spec);
+    rightChain.prepare(spec);
+
+    auto chainSettings = getChainSettings(treeState);
+
+    auto peakCoefficients = juce::dsp::IIR::Coefficients<float>::makePeakFilter(sampleRate,
+        chainSettings.peakFreq,
+        chainSettings.peakQ,
+        juce::Decibels::decibelsToGain(chainSettings.peakGainInDecibels));
+
+    *leftChain.get<ChainPositions::Peak>().coefficients = *peakCoefficients;
+    *rightChain.get<ChainPositions::Peak>().coefficients = *peakCoefficients;
 }
 
 void EQPLUGAudioProcessor::releaseResources()
@@ -149,18 +159,28 @@ void EQPLUGAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce:
     for (auto i = totalNumInputChannels; i < totalNumOutputChannels; ++i)
         buffer.clear (i, 0, buffer.getNumSamples());
 
-    // This is the place where you'd normally do the guts of your plugin's
-    // audio processing...
-    // Make sure to reset the state if your inner loop is processing
-    // the samples and the outer loop is handling the channels.
-    // Alternatively, you can process the samples with the channels
-    // interleaved by keeping the same state.
-    for (int channel = 0; channel < totalNumInputChannels; ++channel)
-    {
-        auto* channelData = buffer.getWritePointer (channel);
+    //Updatign Parameters
+    auto chainSettings = getChainSettings(treeState);
 
-        // ..do something to the data...
-    }
+    auto peakCoefficients = juce::dsp::IIR::Coefficients<float>::makePeakFilter(getSampleRate(),
+        chainSettings.peakFreq,
+        chainSettings.peakQ,
+        juce::Decibels::decibelsToGain(chainSettings.peakGainInDecibels));
+
+    *leftChain.get<ChainPositions::Peak>().coefficients = *peakCoefficients;
+    *rightChain.get<ChainPositions::Peak>().coefficients = *peakCoefficients;
+    
+    //Hardcoded processing for each of the left and right channels
+    juce::dsp::AudioBlock<float> block(buffer);
+
+    auto leftBlock = block.getSingleChannelBlock(0);
+    auto rightBlock = block.getSingleChannelBlock(1);
+
+    juce::dsp::ProcessContextReplacing<float> leftContext(leftBlock);
+    juce::dsp::ProcessContextReplacing<float> rightContext(rightBlock);
+
+    leftChain.process(leftContext);
+    rightChain.process(rightContext);
 }
 
 //==============================================================================
@@ -190,6 +210,21 @@ void EQPLUGAudioProcessor::setStateInformation (const void* data, int sizeInByte
 }
 
 //NEW STUFF====================================================================
+ChainSettings getChainSettings(juce::AudioProcessorValueTreeState& treeState)
+{
+    ChainSettings settings;
+
+    settings.lowCutFreq = treeState.getRawParameterValue("lowcutfreq")->load();
+    settings.highCutFreq = treeState.getRawParameterValue("highcutfreq")->load();
+    settings.peakFreq = treeState.getRawParameterValue("peakfreq")->load();
+    settings.peakGainInDecibels = treeState.getRawParameterValue("peakgain")->load();
+    settings.peakQ = treeState.getRawParameterValue("peakq")->load();
+    settings.lowCutSlope = treeState.getRawParameterValue("lowcutslope")->load();
+    settings.highCutSlope = treeState.getRawParameterValue("highcutslope")->load();
+
+    return settings;
+}
+
 juce::AudioProcessorValueTreeState::ParameterLayout EQPLUGAudioProcessor::creatParameterLayout()
 {
     juce::AudioProcessorValueTreeState::ParameterLayout layout;
