@@ -103,13 +103,7 @@ void EQPLUGAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock
 
     auto chainSettings = getChainSettings(treeState);
 
-    auto peakCoefficients = juce::dsp::IIR::Coefficients<float>::makePeakFilter(sampleRate,
-        chainSettings.peakFreq,
-        chainSettings.peakQ,
-        juce::Decibels::decibelsToGain(chainSettings.peakGainInDecibels));
-
-    *leftChain.get<ChainPositions::Peak>().coefficients = *peakCoefficients;
-    *rightChain.get<ChainPositions::Peak>().coefficients = *peakCoefficients;
+    updatePeakFilter(chainSettings);
     
     //You may be asking what the heck is this crap. First of all, dito. Sedcond of all, the coefficient
     //is the thing that does the math, so we need to feed it all the info and it will spit out the
@@ -267,13 +261,9 @@ void EQPLUGAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce:
     //Updatign Parameters
     auto chainSettings = getChainSettings(treeState);
 
-    auto peakCoefficients = juce::dsp::IIR::Coefficients<float>::makePeakFilter(getSampleRate(),
-        chainSettings.peakFreq,
-        chainSettings.peakQ,
-        juce::Decibels::decibelsToGain(chainSettings.peakGainInDecibels));
+    updatePeakFilter(chainSettings);
 
-    *leftChain.get<ChainPositions::Peak>().coefficients = *peakCoefficients;
-    *rightChain.get<ChainPositions::Peak>().coefficients = *peakCoefficients;
+    
 
     //A lot of pourly written garbage, but hey it works.
     auto cutCoefficients = juce::dsp::FilterDesign<float>::designIIRHighpassHighOrderButterworthMethod(chainSettings.lowCutFreq,
@@ -429,6 +419,24 @@ ChainSettings getChainSettings(juce::AudioProcessorValueTreeState& treeState)
     settings.highCutSlope = static_cast<Slope>(treeState.getRawParameterValue("highcutslope")->load());
 
     return settings;
+}
+
+void EQPLUGAudioProcessor::updatePeakFilter(const ChainSettings& chainSettings)
+{
+    auto peakCoefficients = juce::dsp::IIR::Coefficients<float>::makePeakFilter(getSampleRate(),
+        chainSettings.peakFreq,
+        chainSettings.peakQ,
+        juce::Decibels::decibelsToGain(chainSettings.peakGainInDecibels));
+
+    //*leftChain.get<ChainPositions::Peak>().coefficients = *peakCoefficients;
+    //*rightChain.get<ChainPositions::Peak>().coefficients = *peakCoefficients;
+    updateCoefficients(leftChain.get<ChainPositions::Peak>().coefficients, peakCoefficients);
+    updateCoefficients(rightChain.get<ChainPositions::Peak>().coefficients, peakCoefficients);
+}
+
+void EQPLUGAudioProcessor::updateCoefficients(Coefficients &old, const Coefficients &replacements)
+{
+    *old = *replacements;
 }
 
 juce::AudioProcessorValueTreeState::ParameterLayout EQPLUGAudioProcessor::creatParameterLayout()
