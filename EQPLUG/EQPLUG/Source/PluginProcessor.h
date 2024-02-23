@@ -98,7 +98,7 @@ private:
 
     template<typename ChainType, typename CoefficientType>
    
-    void updateCutFilter(ChainType& leftLowCut, 
+    /*void updateCutFilter(ChainType& leftLowCut,
         const CoefficientType& cutCoefficients,
         //const ChainSettings& chainSettings,
         const Slope& lowCutSlope)
@@ -148,7 +148,7 @@ private:
             break;
         }
         }
-    }
+    }*/
 
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (EQPLUGAudioProcessor)

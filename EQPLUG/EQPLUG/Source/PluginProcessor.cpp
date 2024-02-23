@@ -134,7 +134,7 @@ void EQPLUGAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock
     {
         *leftLowCut.get<0>().coefficients = *cutCoefficients[0];
         leftLowCut.setBypassed<0>(false);
-        *leftLowCut.get<1>().coefficients = *cutCoefficients[0];
+        *leftLowCut.get<1>().coefficients = *cutCoefficients[1];
         leftLowCut.setBypassed<1>(false);
         break;
     }
@@ -142,9 +142,9 @@ void EQPLUGAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock
     {
         *leftLowCut.get<0>().coefficients = *cutCoefficients[0];
         leftLowCut.setBypassed<0>(false);
-        *leftLowCut.get<1>().coefficients = *cutCoefficients[0];
+        *leftLowCut.get<1>().coefficients = *cutCoefficients[1];
         leftLowCut.setBypassed<1>(false);
-        *leftLowCut.get<2>().coefficients = *cutCoefficients[0];
+        *leftLowCut.get<2>().coefficients = *cutCoefficients[2];
         leftLowCut.setBypassed<2>(false);
         break;
     }
@@ -152,11 +152,11 @@ void EQPLUGAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock
     {
         *leftLowCut.get<0>().coefficients = *cutCoefficients[0];
         leftLowCut.setBypassed<0>(false);
-        *leftLowCut.get<1>().coefficients = *cutCoefficients[0];
+        *leftLowCut.get<1>().coefficients = *cutCoefficients[1];
         leftLowCut.setBypassed<1>(false);
-        *leftLowCut.get<2>().coefficients = *cutCoefficients[0];
+        *leftLowCut.get<2>().coefficients = *cutCoefficients[2];
         leftLowCut.setBypassed<2>(false);
-        *leftLowCut.get<3>().coefficients = *cutCoefficients[0];
+        *leftLowCut.get<3>().coefficients = *cutCoefficients[3];
         leftLowCut.setBypassed<3>(false);
         break;
     }
@@ -182,7 +182,7 @@ void EQPLUGAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock
     {
         *rightLowCut.get<0>().coefficients = *cutCoefficients[0];
         rightLowCut.setBypassed<0>(false);
-        *rightLowCut.get<1>().coefficients = *cutCoefficients[0];
+        *rightLowCut.get<1>().coefficients = *cutCoefficients[1];
         rightLowCut.setBypassed<1>(false);
         break;
     }
@@ -190,9 +190,9 @@ void EQPLUGAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock
     {
         *rightLowCut.get<0>().coefficients = *cutCoefficients[0];
         rightLowCut.setBypassed<0>(false);
-        *rightLowCut.get<1>().coefficients = *cutCoefficients[0];
+        *rightLowCut.get<1>().coefficients = *cutCoefficients[1];
         rightLowCut.setBypassed<1>(false);
-        *rightLowCut.get<2>().coefficients = *cutCoefficients[0];
+        *rightLowCut.get<2>().coefficients = *cutCoefficients[2];
         rightLowCut.setBypassed<2>(false);
         break;
     }
@@ -200,11 +200,11 @@ void EQPLUGAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock
     {
         *rightLowCut.get<0>().coefficients = *cutCoefficients[0];
         rightLowCut.setBypassed<0>(false);
-        *rightLowCut.get<1>().coefficients = *cutCoefficients[0];
+        *rightLowCut.get<1>().coefficients = *cutCoefficients[1];
         rightLowCut.setBypassed<1>(false);
-        *rightLowCut.get<2>().coefficients = *cutCoefficients[0];
+        *rightLowCut.get<2>().coefficients = *cutCoefficients[2];
         rightLowCut.setBypassed<2>(false);
-        *rightLowCut.get<3>().coefficients = *cutCoefficients[0];
+        *rightLowCut.get<3>().coefficients = *cutCoefficients[3];
         rightLowCut.setBypassed<3>(false);
         break;
     }
@@ -263,7 +263,7 @@ void EQPLUGAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce:
 
     updatePeakFilter(chainSettings);
 
-    auto cutCoefficients = juce::dsp::FilterDesign<float>::designIIRHighpassHighOrderButterworthMethod(chainSettings.lowCutFreq,
+    /*auto cutCoefficients = juce::dsp::FilterDesign<float>::designIIRHighpassHighOrderButterworthMethod(chainSettings.lowCutFreq,
         getSampleRate(),
         2 * (chainSettings.lowCutSlope + 1));
 
@@ -272,6 +272,7 @@ void EQPLUGAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce:
 
     auto& rightLowCut = rightChain.get<ChainPositions::LowCut>();
     updateCutFilter(rightLowCut, cutCoefficients, chainSettings.lowCutSlope);
+    */
 
     /*//A lot of pourly written garbage, but hey it works.
     auto cutCoefficients = juce::dsp::FilterDesign<float>::designIIRHighpassHighOrderButterworthMethod(chainSettings.lowCutFreq,
@@ -412,6 +413,12 @@ void EQPLUGAudioProcessor::setStateInformation (const void* data, int sizeInByte
     // You should use this method to restore your parameters from this memory block,
     // whose contents will have been created by the getStateInformation() call.
 }
+
+
+
+
+
+
 
 //NEW STUFF====================================================================
 ChainSettings getChainSettings(juce::AudioProcessorValueTreeState& treeState)
