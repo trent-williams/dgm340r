@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<JUCERPROJECT id="YLBBWq" name="Gains 3" projectType="audioplug" useAppConfig="0"
+              addUsingNamespaceToJuceHeader="0" jucerFormatVersion="1">
+  <MAINGROUP id="PkT3wD" name="Gains 3">
+    <GROUP id="{EFA4F5E3-0991-B5DC-9260-2E8AD0E44FD5}" name="Source"/>
+    <FILE id="dgbHtn" name="Fader-Knob-01.png" compile="0" resource="1"
+          file="../../../../../Downloads/Custom-Gain-Control-Grafx-1/Fader-Knob-01.png"/>
+    <FILE id="vUgqnx" name="FaderBG-01.png" compile="0" resource="1" file="../../../../../Downloads/Custom-Gain-Control-Grafx-1/FaderBG-01.png"/>
+    <FILE id="tv410Y" name="FaderBG-02.png" compile="0" resource="1" file="../../../../../Downloads/Custom-Gain-Control-Grafx-1/FaderBG-02.png"/>
+    <FILE id="A81NZ7" name="FaderBG-03.png" compile="0" resource="1" file="../../../../../Downloads/Custom-Gain-Control-Grafx-1/FaderBG-03.png"/>
+    <FILE id="hw48Nw" name="PluginEditor.cpp" compile="1" resource="0"
+          file="../../../../../Downloads/GAINS3 Code with Custom BG/PluginEditor.cpp"/>
+    <FILE id="fwLOmU" name="PluginEditor.h" compile="0" resource="0" file="../../../../../Downloads/GAINS3 Code with Custom BG/PluginEditor.h"/>
+    <FILE id="BwxBPL" name="PluginProcessor.cpp" compile="1" resource="0"
+          file="../../../../../Downloads/GAINS3 Code with Custom BG/PluginProcessor.cpp"/>
+    <FILE id="GL4680" name="PluginProcessor.h" compile="0" resource="0"
+          file="../../../../../Downloads/GAINS3 Code with Custom BG/PluginProcessor.h"/>
+    <FILE id="iLcgWs" name="Designer.png" compile="0" resource="1" file="../../../../../Downloads/Designer.png"/>
+  </MAINGROUP>
+  <MODULES>
+    <MODULE id="juce_audio_basics" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_audio_devices" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_audio_formats" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_audio_plugin_client" showAllCode="1" useLocalCopy="0"
+            useGlobalPath="1"/>
+    <MODULE id="juce_audio_processors" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_audio_utils" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_core" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_data_structures" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_dsp" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_events" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_graphics" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_gui_basics" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_gui_extra" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+  </MODULES>
+  <JUCEOPTIONS JUCE_STRICT_REFCOUNTEDPOINTER="1" JUCE_VST3_CAN_REPLACE_VST2="0"/>
+  <EXPORTFORMATS>
+    <VS2022 targetFolder="Builds/VisualStudio2022">
+      <CONFIGURATIONS>
+        <CONFIGURATION isDebug="1" name="Debug" targetName="Gains 3"/>
+        <CONFIGURATION isDebug="0" name="Release" targetName="Gains 3"/>
+      </CONFIGURATIONS>
+      <MODULEPATHS>
+        <MODULEPATH id="juce_audio_basics" path="../../../../../JUCE/modules"/>
+        <MODULEPATH id="juce_audio_devices" path="../../../../../JUCE/modules"/>
+        <MODULEPATH id="juce_audio_formats" path="../../../../../JUCE/modules"/>
+        <MODULEPATH id="juce_audio_plugin_client" path="../../../../../JUCE/modules"/>
+        <MODULEPATH id="juce_audio_processors" path="../../../../../JUCE/modules"/>
+        <MODULEPATH id="juce_audio_utils" path="../../../../../JUCE/modules"/>
+        <MODULEPATH id="juce_core" path="../../../../../JUCE/modules"/>
+        <MODULEPATH id="juce_data_structures" path="../../../../../JUCE/modules"/>
+        <MODULEPATH id="juce_dsp" path="../../../../../JUCE/modules"/>
+        <MODULEPATH id="juce_events" path="../../../../../JUCE/modules"/>
+        <MODULEPATH id="juce_graphics" path="../../../../../JUCE/modules"/>
+        <MODULEPATH id="juce_gui_basics" path="../../../../../JUCE/modules"/>
+        <MODULEPATH id="juce_gui_extra" path="../../../../../JUCE/modules"/>
+      </MODULEPATHS>
+    </VS2022>
+  </EXPORTFORMATS>
+</JUCERPROJECT>

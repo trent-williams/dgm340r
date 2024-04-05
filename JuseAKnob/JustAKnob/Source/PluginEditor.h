@@ -22,7 +22,7 @@ public:
         setColour(juce::Slider::thumbColourId, juce::Colours::purple);
     }
 
-    void drawRotarySlider(juce::Graphics& g, int x, int y, int width, int height, float sliderPos, float rotaryStartAngle, float rotaryEndAngle, juce::Slider& slider) override
+    /*void drawRotarySlider(juce::Graphics& g, int x, int y, int width, int height, float sliderPos, float rotaryStartAngle, float rotaryEndAngle, juce::Slider& slider) override
     {
         float diameter = juce::jmin(width, height);
         float radius = diameter / 2;
@@ -48,10 +48,10 @@ public:
 
         dialTick.addRectangle(0, -radius, 5.0, 200);
         g.fillPath(dialTick, juce::AffineTransform::rotation(angle).translated(centerX, centerY));
-    }
+    }*/
 
 private:
-    juce::Image knobGraphic = juce::ImageCache::getFromMemory(BinaryData::Knob_png, BinaryData::Knob_pngSize);
+    //juce::Image knobGraphic = juce::ImageCache::getFromMemory(BinaryData::Knob_png, BinaryData::Knob_pngSize);
     //juce::File knobImagePath = "C:\\Users\\trent\\OneDrive - Utah Valley Universit\\School Docs\\02 Spring 2024\\DGM 340R\\Knob.png";
     juce::Path dialTick;
     juce::AffineTransform transform;
