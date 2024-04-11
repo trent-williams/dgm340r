@@ -35,19 +35,30 @@ public:
 private:
     juce::Image thumbImage = juce::ImageCache::getFromMemory(BinaryData::Smily_png, BinaryData::Smily_pngSize);
 };
-//=================================================================================
-//NEW SLIDER FUNCTION
-class FilmStripKnob : public Slider
+
+class KnobLookAndFeel : public juce::LookAndFeel_V4
 {
 public:
-    FilmStripKnob(juce::File const& image, const int numFrames, const bool stripIsHorizontal) : juce::Slider(image.getFullPathName() + T("FilmStripKnob")), filmStrip(image.exists() ? ImageFileFormat::loadFrom(image) : 0), numFrames_(numFrames), isHorizontal_(stripIsHorizontal)
+    KnobLookAndFeel()
     {
-        if (filmStrip)
-        {
-            setTextBoxStyle(NoTextBox)
-        }
+        setColour(juce::Slider::textBoxTextColourId, juce::Colours::black);
     }
+    ~KnobLookAndFeel(){}
 };
+//=================================================================================
+//FLIM STRIP STUFF
+class FilmStripSlider
+{
+public:
+    FilmStripSlider(juce::Image* _knobStrip);
+    void drawFrame(juce::Graphics& g, int x, int y, int width, int height, juce::Slider& slider, double position);
+    juce::Image* knobStrip;
+
+private:
+    int frameCount, frameSize;
+    bool isVerticalStrip;
+};
+
 //==================================================================================
 //OLD CODE
 class AHCompStripAudioProcessorEditor : public juce::AudioProcessorEditor
@@ -69,7 +80,7 @@ private:
     // access the processor object that created it.
     AHCompStripAudioProcessor& audioProcessor;
     
-
+    //SLIDER STUFF
     juce::Slider panDial;
     std::unique_ptr<SliderAttachment> panAttachment;
 
@@ -100,8 +111,11 @@ private:
     juce::Label compOutputLabel;
     std::unique_ptr<SliderAttachment> outputAttachment;
 
+    //IMAGES AND WHATNOT
     juce::Image background = juce::ImageCache::getFromMemory(BinaryData::Press_png, BinaryData::Press_pngSize);
     
+    juce::Image knobFilmRoll;
+
     SliderLookAndFeel sliderLookAndFeel;
 
 

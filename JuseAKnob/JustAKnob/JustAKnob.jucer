@@ -4,6 +4,7 @@
               addUsingNamespaceToJuceHeader="0" jucerFormatVersion="1">
   <MAINGROUP id="JKyEHY" name="JustAKnob">
     <GROUP id="{22AE01C3-96C4-FE04-2E20-2292102933FF}" name="Images">
+      <FILE id="DLt4Ap" name="Green Knob.png" compile="0" resource="1" file="../../../../../../Desktop/Knob Images/Green Knob.png"/>
       <FILE id="eMoY31" name="Knob.png" compile="0" resource="1" file="../../Knob.png"/>
     </GROUP>
     <GROUP id="{21264E89-B3F3-C035-878C-9FF25254DBFA}" name="Source">

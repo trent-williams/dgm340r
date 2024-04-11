@@ -41,6 +41,23 @@ private:
     bool isVerticalStrip;
 };
 
+class FilmKnobLookAndFeel : public juce::LookAndFeel_V4
+{
+public:
+    FilmKnobLookAndFeel(){}
+    ~FilmKnobLookAndFeel(){}
+
+    void drawRotarySlider(juce::Graphics& g, int x, int y, int width, int height, float sliderPos, float rotaryStartAngle, float rotaryEndAngle, juce::Slider& slider) override
+    {
+        float diameter = juce::jmin(width, height);
+        float radius = diameter / 2;
+        float centerx = x + width / 2;
+        float centery = y + height / 2;
+        float rx = centerx - radius;
+        float ry = centery - radius;
+        float angle = rotaryStartAngle + (sliderPos * (rotaryEndAngle - rotaryStartAngle));
+    }
+};
 //==================================================================================
 //TEMPLATE CODE
 class JustAKnobAudioProcessorEditor  : public juce::AudioProcessorEditor
@@ -55,7 +72,6 @@ public:
 
 private:
     JustAKnobAudioProcessor& audioProcessor;
-    //juce::Slider knob, secondKnob;
     CustomLookAndFeel knobLookAndFeel;
 
     juce::Slider knob;

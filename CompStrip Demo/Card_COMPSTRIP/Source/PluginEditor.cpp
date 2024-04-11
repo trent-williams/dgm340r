@@ -103,11 +103,13 @@ AHCompStripAudioProcessorEditor::AHCompStripAudioProcessorEditor (AHCompStripAud
     compOutputLabel.attachToComponent(&compOutput, true);
     outputAttachment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(audioProcessor.treeState, "output", compOutput);
 
-
-
+    //========================================================================
+    //IMAGES AND SUCH
     // Make sure that before the constructor has finished, you've set the
     // editor's size to whatever you need it to be.
     setSize (800, 600);
+
+    knobFilmRoll = juce::ImageCache::getFromMemory(BinaryData::Hue_Shift_Orange_Knog_png, BinaryData::Hue_Shift_Orange_Knog_pngSize);
 }
 
 
@@ -116,11 +118,60 @@ AHCompStripAudioProcessorEditor::~AHCompStripAudioProcessorEditor()
 }
 
 //==============================================================================
+// FILMSTRIP CODE
+FilmStripSlider::FilmStripSlider(juce::Image* _knobStrip) : knobStrip(_knobStrip)
+{
+    if (knobStrip->getWidth() > knobStrip->getHeight())
+    {
+        frameCount = knobStrip->getWidth() / knobStrip->getHeight();
+        frameSize = knobStrip->getHeight();
+        isVerticalStrip = false;
+    }
+    else
+    {
+        frameCount = knobStrip->getHeight() / knobStrip->getWidth();
+        frameSize = knobStrip->getWidth();
+        isVerticalStrip = true;
+    }
+}
+
+void FilmStripSlider::drawFrame(juce::Graphics& g, int x, int y, int width, int height, juce::Slider& slider, double position)
+{
+    const double div = slider.getMaximum() / frameCount;
+    double pos = (int)(position / div);
+
+    if (pos > 0)
+        pos = pos - 1;
+
+    if (width != height)
+    {
+        x = (width / 2) - (height / 2);
+        width = height;
+    }
+
+    if (isVerticalStrip)
+    {
+        g.drawImage(*knobStrip, x, y, width, height, 0, (int)(pos * frameSize), frameSize, frameSize, false);
+    }
+    else
+    {
+        g.drawImage(*knobStrip, x, y, width, height, (int)(pos * frameSize), 0, frameSize, frameSize, false);
+    }
+}
+
+//==============================================================================
 void AHCompStripAudioProcessorEditor::paint (juce::Graphics& g)
 {
     //g.fillAll(juce::Colours::purple);
 
+    //g.drawImageWithin(background, 0, 0, getWidth(), getHeight(), juce::RectanglePlacement::stretchToFit);
+
     g.drawImageWithin(background, 0, 0, getWidth(), getHeight(), juce::RectanglePlacement::stretchToFit);
+
+    //==============================================================================
+    //FILM STRIP PAINT
+    FilmStripSlider fssThresh(&knobFilmRoll);
+    fssThresh.drawFrame(g, (getWidth() / 2) - 250, (getHeight() / 3) - 50, 100, 100, compThresh, compThresh.getValue());
 }
 
 void AHCompStripAudioProcessorEditor::resized()
