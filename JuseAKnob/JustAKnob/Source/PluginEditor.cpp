@@ -86,6 +86,6 @@ void JustAKnobAudioProcessorEditor::paint (juce::Graphics& g)
 
 void JustAKnobAudioProcessorEditor::resized()
 {
-    knob.setBounds(20, 20, 400, 400);
-    secondKnob.setBounds(20, 20, 400, 400);
+    knob.setBounds(20, 20, 250,250);
+    //secondKnob.setBounds(20, 20, 400, 400);
 }
