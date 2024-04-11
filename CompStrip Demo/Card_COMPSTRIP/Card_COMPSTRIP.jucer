@@ -3,6 +3,10 @@
 <JUCERPROJECT id="ljMlND" name="Card_COMPSTRIP" projectType="audioplug" useAppConfig="0"
               addUsingNamespaceToJuceHeader="0" jucerFormatVersion="1">
   <MAINGROUP id="MEudo1" name="Card_COMPSTRIP">
+    <GROUP id="{CFD8079C-2359-81E2-5E3B-0C22E8426B7D}" name="Images">
+      <FILE id="soSVxe" name="Smily.png" compile="0" resource="1" file="../../../../../../Downloads/Smily.png"/>
+      <FILE id="ilL8cG" name="Press.png" compile="0" resource="1" file="../../../../../../Downloads/Press.png"/>
+    </GROUP>
     <GROUP id="{4961BBBB-E5AB-E192-9060-9EC0C2FD351D}" name="Source">
       <FILE id="U1AR9c" name="PluginProcessor.cpp" compile="1" resource="0"
             file="Source/PluginProcessor.cpp"/>
