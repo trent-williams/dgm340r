@@ -16,20 +16,15 @@ JustAKnobAudioProcessorEditor::JustAKnobAudioProcessorEditor (JustAKnobAudioProc
     // Make sure that before the constructor has finished, you've set the
     // editor's size to whatever you need it to be.
     setSize (500, 500);
-
+    
     addAndMakeVisible(knob);
-    knob.setSliderStyle(juce::Slider::SliderStyle::RotaryHorizontalDrag);
-    knob.setTextBoxStyle(juce::Slider::NoTextBox, true, 0, 0);
-    knob.setRange(-1, 1);
+    knob.setSliderStyle(juce::Slider::SliderStyle::RotaryHorizontalVerticalDrag);
+    knob.setTextBoxStyle(juce::Slider::TextBoxBelow, true, 0, 0);
+    knob.setRange(0, 100);
     knob.setValue(0);
-
-    knob.setLookAndFeel(&knobLookAndFeel);
-    /*
-    addAndMakeVisible(secondKnob);
-    secondKnob.setSliderStyle(juce::Slider::SliderStyle::RotaryHorizontalDrag);
-    secondKnob.setTextBoxStyle(juce::Slider::NoTextBox, true, 0, 0);
-    secondKnob.setRange(-1, 1);
-    secondKnob.setValue(0);*/
+    
+    knobFilmRoll = juce::ImageCache::getFromMemory(BinaryData::Green_Knob_png, BinaryData::Green_Knob_pngSize);
+    
 }
 
 JustAKnobAudioProcessorEditor::~JustAKnobAudioProcessorEditor()
@@ -37,14 +32,56 @@ JustAKnobAudioProcessorEditor::~JustAKnobAudioProcessorEditor()
 }
 
 //==============================================================================
+//FILMSTRIP
+FilmStripSlider::FilmStripSlider(juce::Image* _knobStrip) : knobStrip(_knobStrip)
+{
+    if (knobStrip->getWidth() > knobStrip->getHeight())
+    {
+        frameCount = knobStrip->getWidth() / knobStrip->getHeight();
+        frameSize = knobStrip->getHeight();
+        isVerticalStrip = false;
+    }
+    else
+    {
+        frameCount = knobStrip->getHeight() / knobStrip->getWidth();
+        frameSize = knobStrip->getWidth();
+        isVerticalStrip = true;
+    }
+}
+
+void FilmStripSlider::drawFrame(juce::Graphics& g, int x, int y, int width, int height, juce::Slider& slider, double position)
+{
+    const double div = slider.getMaximum() / frameCount;
+    double pos = (int)(position / div);
+
+    if (pos > 0)
+        pos = pos - 1;
+
+    if (width != height)
+    {
+        x = (width / 2) - (height / 2);
+        width = height;
+    }
+
+    if (isVerticalStrip)
+    {
+        g.drawImage(*knobStrip, x, y, width, height, 0, (int)(pos * frameSize), frameSize, frameSize, false);
+    }
+    else
+    {
+        g.drawImage(*knobStrip, x, y, width, height, (int)(pos * frameSize), 0, frameSize, frameSize, false);
+    }
+}
+//==============================================================================
 void JustAKnobAudioProcessorEditor::paint (juce::Graphics& g)
 {
-    // (Our component is opaque, so we must completely fill the background with a solid colour)
-    //g.fillAll (getLookAndFeel().findColour (juce::ResizableWindow::backgroundColourId));
     g.fillAll(juce::Colours::white);
     g.setColour (juce::Colours::green);
     g.setFont (15.0f);
-   // g.drawFittedText ("Hello World!", getLocalBounds(), juce::Justification::centred, 1);
+
+    //FILMROLL STUFF
+    FilmStripSlider fssKnob(&knobFilmRoll);
+    fssKnob.drawFrame(g, 20, 20, 250, 250, knob, knob.getValue());
 }
 
 void JustAKnobAudioProcessorEditor::resized()
