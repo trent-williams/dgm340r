@@ -51,7 +51,7 @@ FilmStripSlider::FilmStripSlider(juce::Image* _knobStrip) : knobStrip(_knobStrip
 
 void FilmStripSlider::drawFrame(juce::Graphics& g, int x, int y, int width, int height, juce::Slider& slider, double position)
 {
-    const double div = slider.getMinValue() / frameCount;
+    const double div = slider.getMaximum() / frameCount;
     double pos = (int)(position / div);
 
     if (pos > 0)

@@ -16,7 +16,9 @@
           file="../../../../../Downloads/GAINS3 Code with Custom BG/PluginProcessor.cpp"/>
     <FILE id="GL4680" name="PluginProcessor.h" compile="0" resource="0"
           file="../../../../../Downloads/GAINS3 Code with Custom BG/PluginProcessor.h"/>
-    <FILE id="iLcgWs" name="Designer.png" compile="0" resource="1" file="../../../../../Downloads/Designer.png"/>
+    <FILE id="SqVjIB" name="Smily.png" compile="0" resource="1" file="../../../../../Downloads/Smily.png"/>
+    <FILE id="x1TCje" name="Hue Shift Orange Knog.png" compile="0" resource="1"
+          file="../../../../../Desktop/Knob Images/Hue Shift Orange Knog.png"/>
   </MAINGROUP>
   <MODULES>
     <MODULE id="juce_audio_basics" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
