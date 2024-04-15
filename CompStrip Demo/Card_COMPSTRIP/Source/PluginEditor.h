@@ -47,16 +47,30 @@ public:
 };
 //=================================================================================
 //FLIM STRIP STUFF
-class FilmStripSlider
+class FilmStripLookAndFeel : public juce::LookAndFeel_V4
 {
 public:
-    FilmStripSlider(juce::Image* _knobStrip);
-    void drawFrame(juce::Graphics& g, int x, int y, int width, int height, juce::Slider& slider, double position);
-    juce::Image* knobStrip;
+    FilmStripLookAndFeel()
+    {
+        filmStrip = juce::ImageCache::getFromMemory(BinaryData::Purple_Aliens_Knob_png, BinaryData::Purple_Aliens_Knob_pngSize);
+        numFrames = filmStrip.getHeight() / filmStrip.getWidth();
+
+        setColour(juce::Slider::textBoxTextColourId, juce::Colours::black);
+    }
+    ~FilmStripLookAndFeel(){}
+
+    void drawRotarySlider(juce::Graphics& g, int x, int y, int width, int height, float sliderPos, const float rotaryStartAngle, const float rotaryEndAngle, juce::Slider& slider) override
+    {
+        int frameHeight = filmStrip.getHeight() / numFrames;
+        int frameIndex = (int)std::floor(sliderPos * (numFrames - 1));
+        juce::Rectangle<int> clip (0, frameIndex * frameHeight, filmStrip.getWidth(), frameHeight);
+
+        g.drawImage(filmStrip, x, y, width, height, clip.getX(), clip.getY(), clip.getWidth(), clip.getHeight());
+    }
 
 private:
-    int frameCount, frameSize;
-    bool isVerticalStrip;
+    juce::Image filmStrip;
+    int numFrames;
 };
 
 //==================================================================================
@@ -117,6 +131,7 @@ private:
     juce::Image knobFilmRoll;
 
     SliderLookAndFeel sliderLookAndFeel;
+    FilmStripLookAndFeel filmStripLookAndFeel;
 
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(AHCompStripAudioProcessorEditor)

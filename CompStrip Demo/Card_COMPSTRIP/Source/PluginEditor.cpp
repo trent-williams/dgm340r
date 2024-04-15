@@ -19,6 +19,7 @@ AHCompStripAudioProcessorEditor::AHCompStripAudioProcessorEditor (AHCompStripAud
     panDial.setTextBoxStyle(juce::Slider::NoTextBox, false, 100, 50);
     panDial.setDoubleClickReturnValue(true, 0.0);
     addAndMakeVisible(panDial);
+    panDial.setLookAndFeel(&filmStripLookAndFeel);
     panAttachment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(audioProcessor.treeState, "panner", panDial);
 
 
@@ -38,6 +39,7 @@ AHCompStripAudioProcessorEditor::AHCompStripAudioProcessorEditor (AHCompStripAud
     compInput.setDoubleClickReturnValue(true, 0.0);
     compInput.setTextValueSuffix(" dB");
     addAndMakeVisible(compInput);
+    compInput.setLookAndFeel(&filmStripLookAndFeel);
     addAndMakeVisible(compInputLabel);
     compInputLabel.setText("Input", juce::dontSendNotification);
     compInputLabel.attachToComponent(&compInput, true);
@@ -49,6 +51,7 @@ AHCompStripAudioProcessorEditor::AHCompStripAudioProcessorEditor (AHCompStripAud
     compThresh.setDoubleClickReturnValue(true, 0.0);
     compThresh.setTextValueSuffix(" dB");
     addAndMakeVisible(compThresh);
+    compThresh.setLookAndFeel(&filmStripLookAndFeel);
     addAndMakeVisible(compThreshLabel);
     compThreshLabel.setText("Thresh", juce::dontSendNotification);
     compThreshLabel.attachToComponent(&compThresh, true);
@@ -60,6 +63,7 @@ AHCompStripAudioProcessorEditor::AHCompStripAudioProcessorEditor (AHCompStripAud
     compRatio.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 75, 25);
     compRatio.setDoubleClickReturnValue(true, 1.0);
     addAndMakeVisible(compRatio);
+    compRatio.setLookAndFeel(&filmStripLookAndFeel);
     addAndMakeVisible(compRatioLabel);
     compRatioLabel.setText("Ratio", juce::dontSendNotification);
     compRatioLabel.attachToComponent(&compRatio, true);
@@ -72,6 +76,7 @@ AHCompStripAudioProcessorEditor::AHCompStripAudioProcessorEditor (AHCompStripAud
     compAttack.setDoubleClickReturnValue(true, 10.0);
     compAttack.setTextValueSuffix(" ms");
     addAndMakeVisible(compAttack);
+    compAttack.setLookAndFeel(&filmStripLookAndFeel);
     addAndMakeVisible(compAttackLabel);
     compAttackLabel.setText("Attack", juce::dontSendNotification);
     compAttackLabel.attachToComponent(&compAttack, true);
@@ -85,6 +90,7 @@ AHCompStripAudioProcessorEditor::AHCompStripAudioProcessorEditor (AHCompStripAud
     compRelease.setDoubleClickReturnValue(true, 125.0);
     compRelease.setTextValueSuffix(" ms");
     addAndMakeVisible(compRelease);
+    compRelease.setLookAndFeel(&filmStripLookAndFeel);
     addAndMakeVisible(compReleaseLabel);
     compReleaseLabel.setText("Release", juce::dontSendNotification);
     compReleaseLabel.attachToComponent(&compRelease, true);
@@ -98,6 +104,7 @@ AHCompStripAudioProcessorEditor::AHCompStripAudioProcessorEditor (AHCompStripAud
     compOutput.setDoubleClickReturnValue(true, 0.0);
     compOutput.setTextValueSuffix(" dB");
     addAndMakeVisible(compOutput);
+    compOutput.setLookAndFeel(&filmStripLookAndFeel);
     addAndMakeVisible(compOutputLabel);
     compOutputLabel.setText("Output", juce::dontSendNotification);
     compOutputLabel.attachToComponent(&compOutput, true);
@@ -109,7 +116,7 @@ AHCompStripAudioProcessorEditor::AHCompStripAudioProcessorEditor (AHCompStripAud
     // editor's size to whatever you need it to be.
     setSize (800, 600);
 
-    knobFilmRoll = juce::ImageCache::getFromMemory(BinaryData::Hue_Shift_Orange_Knog_png, BinaryData::Hue_Shift_Orange_Knog_pngSize);
+    //knobFilmRoll = juce::ImageCache::getFromMemory(BinaryData::Hue_Shift_Orange_Knog_png, BinaryData::Hue_Shift_Orange_Knog_pngSize);
 }
 
 
@@ -119,59 +126,18 @@ AHCompStripAudioProcessorEditor::~AHCompStripAudioProcessorEditor()
 
 //==============================================================================
 // FILMSTRIP CODE
-FilmStripSlider::FilmStripSlider(juce::Image* _knobStrip) : knobStrip(_knobStrip)
-{
-    if (knobStrip->getWidth() > knobStrip->getHeight())
-    {
-        frameCount = knobStrip->getWidth() / knobStrip->getHeight();
-        frameSize = knobStrip->getHeight();
-        isVerticalStrip = false;
-    }
-    else
-    {
-        frameCount = knobStrip->getHeight() / knobStrip->getWidth();
-        frameSize = knobStrip->getWidth();
-        isVerticalStrip = true;
-    }
-}
-
-void FilmStripSlider::drawFrame(juce::Graphics& g, int x, int y, int width, int height, juce::Slider& slider, double position)
-{
-    const double div = slider.getMaximum() / frameCount;
-    double pos = (int)(position / div);
-
-    if (pos > 0)
-        pos = pos - 1;
-
-    if (width != height)
-    {
-        x = (width / 2) - (height / 2);
-        width = height;
-    }
-
-    if (isVerticalStrip)
-    {
-        g.drawImage(*knobStrip, x, y, width, height, 0, (int)(pos * frameSize), frameSize, frameSize, false);
-    }
-    else
-    {
-        g.drawImage(*knobStrip, x, y, width, height, (int)(pos * frameSize), 0, frameSize, frameSize, false);
-    }
-}
 
 //==============================================================================
 void AHCompStripAudioProcessorEditor::paint (juce::Graphics& g)
 {
-    //g.fillAll(juce::Colours::purple);
+    g.fillAll(juce::Colours::green);
 
     //g.drawImageWithin(background, 0, 0, getWidth(), getHeight(), juce::RectanglePlacement::stretchToFit);
 
-    g.drawImageWithin(background, 0, 0, getWidth(), getHeight(), juce::RectanglePlacement::stretchToFit);
+    //g.drawImageWithin(background, 0, 0, getWidth(), getHeight(), juce::RectanglePlacement::stretchToFit);
 
     //==============================================================================
     //FILM STRIP PAINT
-    FilmStripSlider fssThresh(&knobFilmRoll);
-    fssThresh.drawFrame(g, (getWidth() / 2) - 250, (getHeight() / 3) - 50, 100, 100, compThresh, compThresh.getValue());
 }
 
 void AHCompStripAudioProcessorEditor::resized()
@@ -180,17 +146,17 @@ void AHCompStripAudioProcessorEditor::resized()
 
     gainFader.setBounds((getWidth() / 2) - 50, (getHeight() / 3) - 50, 100, 400);
 
-    compInput.setBounds((getWidth() / 2) - 250, (getHeight() / 3) - 150, 100, 100);
+    compInput.setBounds((getWidth() / 2) - 250, (getHeight() / 3) - 150, 100, 125);
 
-    compThresh.setBounds((getWidth() / 2) - 250, (getHeight() / 3) - 50, 100, 100);
+    compThresh.setBounds((getWidth() / 2) - 250, (getHeight() / 3), 100, 125);
 
-    compRatio.setBounds((getWidth() / 2) - 250, (getHeight() / 3) + 50, 100, 100);
+    compRatio.setBounds((getWidth() / 2) - 250, (getHeight() / 3) + 150, 100, 125);
 
-    compAttack.setBounds((getWidth() / 2) + 175, (getHeight() / 3) - 150, 100, 100);
+    compAttack.setBounds((getWidth() / 2) + 175, (getHeight() / 3) - 150, 100, 125);
 
-    compRelease.setBounds((getWidth() / 2) + 175, (getHeight() / 3) - 50, 100, 100);
+    compRelease.setBounds((getWidth() / 2) + 175, (getHeight() / 3), 100, 125);
 
-    compOutput.setBounds((getWidth() / 2) + 175, (getHeight() / 3) + 50, 100, 100);
+    compOutput.setBounds((getWidth() / 2) + 175, (getHeight() / 3) + 150, 100, 125);
 
 
 
